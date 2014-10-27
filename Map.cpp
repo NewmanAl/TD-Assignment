@@ -32,7 +32,7 @@ Map::Map(int rows, int cols, TextureManager* texManager) :rows(rows), cols(cols)
 	pathSprite5.setTexture(texManager->getTexture(TextureManager::ENV));
 	pathSprite5.setTextureRect(sf::IntRect(24 * 6, 0, 24, 24));
 
-	pathSprite5.setTexture(texManager->getTexture(TextureManager::ENV));
+	pathSprite6.setTexture(texManager->getTexture(TextureManager::ENV));
 	pathSprite6.setTextureRect(sf::IntRect(24 * 7, 0, 24, 24));
 
 	pathSprite7.setTexture(texManager->getTexture(TextureManager::ENV));
