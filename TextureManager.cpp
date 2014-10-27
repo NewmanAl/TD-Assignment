@@ -4,7 +4,7 @@
 using namespace std;
 
 
-const string TextureManager::ENV_TEX_LOC = "white-tower.png";
+const string TextureManager::ENV_TEX_LOC = "test.png";
 const string TextureManager::SPRITE_TEX_LOC = "white-tower.png";
 const string TextureManager::UI_TEX_LOC = "white-tower.png";
 
@@ -15,16 +15,6 @@ TextureManager::TextureManager(){
 	//texture[0] is Environment
 	//texture[1] is Sprites
 	//texture[2] is UI
-	/*textures = new sf::Texture*[3];
-	textures[0] = &sf::Texture();
-	cout << textures[0]->loadFromFile(ENV_TEX_LOC);
-	
-	textures[1] = &sf::Texture();
-	textures[1]->loadFromFile(SPRITE_TEX_LOC);
-	
-	textures[2] = &sf::Texture();
-	cout << textures[2]->loadFromFile(UI_TEX_LOC) << endl;;
-	*/
 
 	textures = new sf::Texture[3];
 	textures[0].loadFromFile(ENV_TEX_LOC);

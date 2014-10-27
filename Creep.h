@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <vector>
 #include "Map.h"
@@ -52,4 +52,4 @@ private:
 	int locationX;
 	int locationY;
 	Direction direction;
-};
+};*/

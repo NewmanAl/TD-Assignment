@@ -1,19 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include "TextureManager.h"
 #include <iostream>
+#include "Map.h"
+#include <ctime>
 
 using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(500, 500), "SFML works!");
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
 	TextureManager* tm = new TextureManager();
-	sf::Sprite s;
-	s.setTexture(tm->getTexture(TextureManager::SPRITE));
-	s.setScale(0.1, 0.1);
+	
+	Map* m = new Map(20, 20, tm);
+
+	for (int i = 0; i < 20; ++i)
+		for (int j = 0; j < 20; ++j)
+			m->setTile(i, j, Map::TILE_TYPE::ENV);
+
+	m->setTile(5, 10, Map::TILE_TYPE::PATH);
+
+	m->setTile(0, 4, Map::TILE_TYPE::START);
+	m->setTile(15, 11, Map::TILE_TYPE::END);
+
+	double elapsedTime = 0;
+	double timePerFrame = 1 / 60; //60 frames per second
+	std::clock_t startTime = std::clock();
 	
 
 
@@ -27,18 +41,30 @@ int main()
 			}
 		}
 
-		if (tm == NULL)
-			cout << "AHSHIT";
 
-		window.clear();
-		window.draw(s);
-		window.display();
+		//keep adding to elapsed time until it reaches timePerFrame
+		if (elapsedTime <= timePerFrame)
+			elapsedTime = (std::clock() - startTime) / (double)CLOCKS_PER_SEC;
+		else{
+			//update logic
+
+			window.clear();
+			m->drawMap(&window);
+			window.display();
+
+			//reset clock
+			elapsedTime = 0;
+			startTime = std::clock();
+		}
 		
 
 	}
 
 	delete tm;
 	tm = NULL;
+
+	delete m;
+	m = NULL;
 
 
 	return 0;

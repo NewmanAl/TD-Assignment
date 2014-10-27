@@ -1,4 +1,4 @@
-#include "Creep.h"
+/*#include "Creep.h"
 #include "Map.h"
 
 #include <iostream>
@@ -295,3 +295,4 @@ Creep::~Creep()
 {
 
 }
+*/
