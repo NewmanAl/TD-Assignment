@@ -1,0 +1,16 @@
+﻿Build started 10/22/2014 6:37:43 PM.
+     1>Project "C:\Users\rethe_000\Documents\Visual Studio 2013\Projects\Tower Defence\Tower Defence\Tower Defence.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\SFML-2.1-vs13\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Creep.cpp Map.cpp Tower.cpp
+         Map.cpp
+         Creep.cpp
+     1>c:\users\rethe_000\documents\visual studio 2013\projects\tower defence\tower defence\creep.h(5): fatal error C1083: Cannot open include file: 'Player.h': No such file or directory
+         Generating Code...
+     1>c:\users\rethe_000\documents\visual studio 2013\projects\tower defence\tower defence\map.cpp(69): warning C4715: 'Map::getTile' : not all control paths return a value
+         Skipping... (no relevant changes detected)
+         Tower.cpp
+     1>Done Building Project "C:\Users\rethe_000\Documents\Visual Studio 2013\Projects\Tower Defence\Tower Defence\Tower Defence.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:04.57
