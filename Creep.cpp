@@ -1,6 +1,5 @@
-/*#include "Creep.h"
+#include "Creep.h"
 #include "Map.h"
-
 #include <iostream>
 
 using namespace std;
@@ -15,11 +14,11 @@ Creep::Creep()
 	strength = 10;
 	locationX = 0;
 	locationY = 0;
+	direction = Direction::RIGHT;
 }
 
-Creep::Creep(int hp, int speed, int defense, int reward, int strength, int locationX, int locationY)
+Creep::Creep(int hp, int speed, int defense, int reward, int strength, int locationX, int locationY, Direction direction)
 {
-
 	this->hitPoints = hp;
 	this->speed = speed;
 	this->defense = defense;
@@ -27,6 +26,7 @@ Creep::Creep(int hp, int speed, int defense, int reward, int strength, int locat
 	this->strength = strength;
 	this->locationX = locationX;
 	this->locationY = locationY;
+	this->direction = direction;
 }
 
 
@@ -66,7 +66,7 @@ int Creep::getLocationY() const
 	return locationY;
 }
 
-Creep::Direction Creep::getDirection() const
+Direction Creep::getDirection() const
 {
 	return direction;
 }
@@ -134,7 +134,7 @@ void Creep::move(Map *map)
 	int mapLocationY = this->locationY;
 
 	// creep's location back to path tile
-	map->setTile(mapLocationX, mapLocationY, MapTile::PATH);
+	//map->setTile(mapLocationX, mapLocationY, TILE_TYPE);
 
 	// change x,y coordinates of an alien according to movement direction
 	if (direction == Direction::LEFT)
@@ -155,7 +155,7 @@ void Creep::move(Map *map)
 	}
 
 	// set new map location to enemy position
-	map->setTile(this->locationX, this->locationY, MapTile::CREEP);
+	//map->setTile(this->locationX, this->locationY, MapTile::CREEP);
 }
 
 // Check if a creep is able to move in a specific direction
@@ -283,11 +283,20 @@ bool Creep::checkEndTile(Map* map, Player* player)
 		player->setCoins(player->getCoins() - strength);
 
 		// set tile creep was on back to path
-		map->setTile(locationX, locationY, MapTile::PATH);
+		//map->setTile(locationX, locationY, MapTile::PATH);
 	}
 
 	// return if a creep has landed on the end tile
 	return creepAtEndTile;
+}
+
+void Creep::damageCreep(Player *player, int damage)
+{
+	hitPoints = hitPoints - damage;
+
+	if (hitPoints <= 0) {
+		player->setCoins(player->getCoins() + reward);
+	}
 }
 
 // Destructor
@@ -295,4 +304,3 @@ Creep::~Creep()
 {
 
 }
-*/
