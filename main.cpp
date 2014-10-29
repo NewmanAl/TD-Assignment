@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include <iostream>
 #include "Map.h"
+#include "CreepSquad.h"
 #include <ctime>
 
 using namespace std;
@@ -15,6 +16,11 @@ int main()
 	TextureManager* tm = new TextureManager();
 	
 	Map* m = new Map(20, 20, tm);
+
+	CreepSquad* creepSquad = new CreepSquad(m, tm);
+	creepSquad->resetCreepSquad(1);
+
+	Player* player = new Player();
 
 	for (int i = 0; i < 20; ++i)
 		for (int j = 0; j < 20; ++j)
@@ -30,7 +36,7 @@ int main()
 	std::clock_t startTime = std::clock();
 	
 
-
+	// test
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -50,6 +56,7 @@ int main()
 
 			window.clear();
 			m->drawMap(&window);
+			creepSquad->move(player, &window);
 			window.display();
 
 			//reset clock

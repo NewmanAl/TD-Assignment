@@ -2,13 +2,14 @@
 
 const int MAX_NUMBER_OF_CREEPS = 10;
 
-CreepSquad::CreepSquad(Map* map)
+CreepSquad::CreepSquad(Map* map, TextureManager* texManager)
 {
 	this->creepSquad = vector<Creep*>(MAX_NUMBER_OF_CREEPS);
 	this->map = map;
+	this->texManager = texManager;
 }
 
-void CreepSquad::move(Player* player)
+void CreepSquad::move(Player* player, sf::RenderWindow* w)
 {
 	for (int i = 0; i < (int)creepSquad.size(); ++i) {
 
@@ -27,6 +28,9 @@ void CreepSquad::move(Player* player)
 		else
 			// move creep on map
 			creepSquad[i]->checkMove(map);
+
+		creepSquad[i]->getSprite().setPosition(creepSquad[i]->getLocationX() * 24, creepSquad[i]->getLocationY() * 24);
+		w->draw(creepSquad[i]->getSprite());
 	}
 }
 
@@ -37,15 +41,24 @@ void CreepSquad::resetCreepSquad(int level)
 	switch (level)
 	{
 	case 1:
-		creepSquad.push_back(new Creep(1, 2, 1, 50, 50, 1, 1, Direction::RIGHT));
-		creepSquad.push_back(new Creep(1, 2, 1, 50, 50, 0, 1, Direction::RIGHT));
+		creepSquad.push_back(new Creep(1, 2, 1, 50, 50, 1, 1, Direction::RIGHT, texManager, SPRITE_TYPE::BLOB));
+		creepSquad.push_back(new Creep(1, 2, 1, 50, 50, 0, 1, Direction::RIGHT, texManager, SPRITE_TYPE::BLOB));
+		creepSquad.push_back(new Creep(1, 2, 1, 50, 50, 0, 1, Direction::RIGHT, texManager, SPRITE_TYPE::BLOB));
+		creepSquad.push_back(new Creep(1, 2, 1, 50, 50, 0, 1, Direction::RIGHT, texManager, SPRITE_TYPE::BLOB));
 		break;
 	}
 
 	// spawn creep on map at it's starting x,y location
-	for (int i = 0; i < creepSquad.size(); ++i)
+	for (int i = 0; i < creepSquad.size(); ++i) {
 		// set creep on the map to it's x,y location
-		//map->setTile(creepSquad[i]->getLocationX(), creepSquad[i]->getLocationY(), MapTile::CREEP);
+
+		// get x,y position of start tile of the map
+
+		// set all starting x,y positions of creeps
+		creepSquad[i]->setLocationX(0);
+		creepSquad[i]->setLocationY(1);
+		creepSquad[i]->getSprite().setPosition(creepSquad[i]->getLocationX() * 24, creepSquad[i]->getLocationY() * 24);
+	}
 }
 CreepSquad::~CreepSquad()
 {

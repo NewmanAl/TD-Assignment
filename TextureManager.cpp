@@ -5,7 +5,7 @@ using namespace std;
 
 
 const string TextureManager::ENV_TEX_LOC = "test.png";
-const string TextureManager::SPRITE_TEX_LOC = "white-tower.png";
+const string TextureManager::SPRITE_TEX_LOC = "creeps.png";
 const string TextureManager::UI_TEX_LOC = "white-tower.png";
 
 TextureManager::TextureManager(){
@@ -39,7 +39,6 @@ sf::Texture& TextureManager::getTexture(TextureManager::TEXTURE tex) const{
 		return textures[0];
 		break;
 	case SPRITE:
-		cout << textures[1].getSize().x;
 		return textures[1];
 		break;
 	case UI:

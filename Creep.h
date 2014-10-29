@@ -3,21 +3,21 @@
 #include <vector>
 #include "Map.h"
 #include "Player.h"
+#include "Map.h"
 
 using namespace std;
 
 // Enum
 enum Direction { UP, DOWN, LEFT, RIGHT };
 
-// Enum representing each type of map tiles
-enum MapTile { ENVIRONMENT = 0, PATH = 1, CREEP = 4, END_TILE = 5 };
+enum SPRITE_TYPE { ELF, WOLF, BULL, OGRE, SKELETON, MAGE, BLOB };
 
 // class definition
 class Creep {
 
 public:
-	Creep();
-	Creep(int hp, int speed, int defense, int reward, int strength, int locationX, int locationY, Direction dir);
+	Creep(TextureManager* texManager);
+	Creep(int hp, int speed, int defense, int reward, int strength, int locationX, int locationY, Direction dir, TextureManager* tex, SPRITE_TYPE spriteType);
 	virtual ~Creep();
 
 	// getters
@@ -29,6 +29,7 @@ public:
 	int getLocationX() const;
 	int getLocationY() const;
 	Direction getDirection() const;
+	sf::Sprite getSprite() const;
 
 	// setters
 	void setHitPoints(int hp);
@@ -56,4 +57,11 @@ private:
 	int locationX;
 	int locationY;
 	Direction direction;
+	SPRITE_TYPE spriteType;
+	TextureManager* texManager; 
+	
+	sf::Sprite sprite1;
+	sf::Sprite sprite2;
+
+	void loadCreepSprites();
 };

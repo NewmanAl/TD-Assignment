@@ -5,7 +5,7 @@
 using namespace std;
 
 // Constructors
-Creep::Creep()
+Creep::Creep(TextureManager* texManager)
 {
 	hitPoints = 50;
 	speed = 1;
@@ -15,9 +15,11 @@ Creep::Creep()
 	locationX = 0;
 	locationY = 0;
 	direction = Direction::RIGHT;
+	spriteType = SPRITE_TYPE::BLOB;
+	texManager = texManager;
 }
 
-Creep::Creep(int hp, int speed, int defense, int reward, int strength, int locationX, int locationY, Direction direction)
+Creep::Creep(int hp, int speed, int defense, int reward, int strength, int locationX, int locationY, Direction direction, TextureManager* texManager, SPRITE_TYPE spriteType)
 {
 	this->hitPoints = hp;
 	this->speed = speed;
@@ -27,6 +29,11 @@ Creep::Creep(int hp, int speed, int defense, int reward, int strength, int locat
 	this->locationX = locationX;
 	this->locationY = locationY;
 	this->direction = direction;
+	this->texManager = texManager;
+	this->spriteType = spriteType;
+
+	// load sprites according to the type of the creep
+	loadCreepSprites();
 }
 
 
@@ -69,6 +76,11 @@ int Creep::getLocationY() const
 Direction Creep::getDirection() const
 {
 	return direction;
+}
+
+sf::Sprite Creep::getSprite() const
+{
+	return sprite1;
 }
 
 // Setters
@@ -134,7 +146,7 @@ void Creep::move(Map *map)
 	int mapLocationY = this->locationY;
 
 	// creep's location back to path tile
-	//map->setTile(mapLocationX, mapLocationY, TILE_TYPE);
+	map->setTile(mapLocationX, mapLocationY, Map::TILE_TYPE::CREEP);
 
 	// change x,y coordinates of an alien according to movement direction
 	if (direction == Direction::LEFT)
@@ -155,7 +167,7 @@ void Creep::move(Map *map)
 	}
 
 	// set new map location to enemy position
-	//map->setTile(this->locationX, this->locationY, MapTile::CREEP);
+	map->setTile(this->locationX, this->locationY, Map::TILE_TYPE::CREEP);
 }
 
 // Check if a creep is able to move in a specific direction
@@ -170,13 +182,13 @@ void Creep::checkMove(Map *map)
 	// else, move along the current direction
 	if (creepDirection == Direction::LEFT)
 	{
-		if (map->getTile(locationX - 1, locationY) == MapTile::ENVIRONMENT) {
-			if (map->getTile(locationX, locationY - 1) == MapTile::PATH) {
+		if (map->getTile(locationX - 1, locationY) == Map::TILE_TYPE::ENV) {
+			if (map->getTile(locationX, locationY - 1) == Map::TILE_TYPE::PATH) {
 				direction = Direction::DOWN;
 				Creep::move(map);
 			}
 
-			if (map->getTile(locationX, locationY + 1) == MapTile::PATH) {
+			if (map->getTile(locationX, locationY + 1) == Map::TILE_TYPE::PATH) {
 				direction = Direction::UP;
 				Creep::move(map);
 			}
@@ -187,15 +199,15 @@ void Creep::checkMove(Map *map)
 	}
 	else if (creepDirection == Direction::RIGHT)
 	{
-		if (map->getTile(locationX + 1, locationY) == MapTile::ENVIRONMENT)
+		if (map->getTile(locationX + 1, locationY) == Map::TILE_TYPE::ENV)
 		{
 
-			if (map->getTile(locationX, locationY - 1) == MapTile::PATH) {
+			if (map->getTile(locationX, locationY - 1) == Map::TILE_TYPE::PATH) {
 				direction = Direction::DOWN;
 				Creep::move(map);
 			}
 
-			if (map->getTile(locationX, locationY + 1) == MapTile::PATH) {
+			if (map->getTile(locationX, locationY + 1) == Map::TILE_TYPE::PATH) {
 				direction = Direction::UP;
 				Creep::move(map);
 			}
@@ -206,14 +218,14 @@ void Creep::checkMove(Map *map)
 	}
 	else if (creepDirection == Direction::UP)
 	{
-		if (map->getTile(locationX, locationY + 1) == MapTile::ENVIRONMENT)
+		if (map->getTile(locationX, locationY + 1) == Map::TILE_TYPE::ENV)
 		{
-			if (map->getTile(locationX - 1, locationY) == MapTile::PATH) {
+			if (map->getTile(locationX - 1, locationY) == Map::TILE_TYPE::PATH) {
 				direction = Direction::LEFT;
 				Creep::move(map);
 			}
 
-			if (map->getTile(locationX + 1, locationY) == MapTile::PATH) {
+			if (map->getTile(locationX + 1, locationY) == Map::TILE_TYPE::PATH) {
 				direction = Direction::RIGHT;
 				Creep::move(map);
 			}
@@ -224,14 +236,14 @@ void Creep::checkMove(Map *map)
 	}
 	else
 	{
-		if (map->getTile(locationX, locationY - 1) == MapTile::ENVIRONMENT)
+		if (map->getTile(locationX, locationY - 1) == Map::TILE_TYPE::ENV)
 		{
-			if (map->getTile(locationX - 1, locationY) == MapTile::PATH) {
+			if (map->getTile(locationX - 1, locationY) == Map::TILE_TYPE::PATH) {
 				direction = Direction::LEFT;
 				Creep::move(map);
 			}
 
-			if (map->getTile(locationX + 1, locationY) == MapTile::PATH) {
+			if (map->getTile(locationX + 1, locationY) == Map::TILE_TYPE::PATH) {
 				direction = Direction::RIGHT;
 				Creep::move(map);
 			}
@@ -254,25 +266,25 @@ bool Creep::checkEndTile(Map* map, Player* player)
 	// if the direction the creep is going in has an end tile, set boolean to true
 	if (direction == Direction::LEFT)
 	{
-		if (map->getTile(locationX - 1, locationY) == MapTile::END_TILE) {
+		if (map->getTile(locationX - 1, locationY) == Map::TILE_TYPE::END) {
 			creepAtEndTile = true;
 		}
 	}
 	else if (direction == Direction::RIGHT)
 	{
-		if (map->getTile(locationX + 1, locationY) == MapTile::END_TILE) {
+		if (map->getTile(locationX + 1, locationY) == Map::TILE_TYPE::END) {
 			creepAtEndTile = true;
 		}
 	}
 	else if (direction == Direction::UP)
 	{
-		if (map->getTile(locationX, locationY + 1) == MapTile::END_TILE) {
+		if (map->getTile(locationX, locationY + 1) == Map::TILE_TYPE::END) {
 			creepAtEndTile = true;
 		}
 	}
 	else
 	{
-		if (map->getTile(locationX, locationY - 1) == MapTile::END_TILE) {
+		if (map->getTile(locationX, locationY - 1) == Map::TILE_TYPE::END) {
 			creepAtEndTile = true;
 		}
 	}
@@ -296,6 +308,55 @@ void Creep::damageCreep(Player *player, int damage)
 
 	if (hitPoints <= 0) {
 		player->setCoins(player->getCoins() + reward);
+	}
+}
+
+void Creep::loadCreepSprites()
+{
+	switch (spriteType)
+	{
+	case SPRITE_TYPE::ELF:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(0, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24, 0, 24, 24));
+		break;
+	case SPRITE_TYPE::WOLF:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(24*2, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24*3, 0, 24, 24));
+		break;
+	case SPRITE_TYPE::BULL:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(24*4, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24*5, 0, 24, 24));
+		break;
+	case SPRITE_TYPE::OGRE:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(24 * 6, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24 * 7, 0, 24, 24));
+		break;
+	case SPRITE_TYPE::SKELETON:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(24 * 8, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24 * 9, 0, 24, 24));
+		break;
+	case SPRITE_TYPE::MAGE:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(24 * 10, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24 * 11, 0, 24, 24));
+		break;
+	case SPRITE_TYPE::BLOB:
+		sprite1.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite1.setTextureRect(sf::IntRect(24 * 12, 0, 24, 24));
+		sprite2.setTexture(texManager->getTexture(TextureManager::TEXTURE::SPRITE));
+		sprite2.setTextureRect(sf::IntRect(24 * 13, 0, 24, 24));
+		break;
 	}
 }
 

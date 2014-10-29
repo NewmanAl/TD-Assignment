@@ -9,7 +9,7 @@ class Map
 {
 public:
 	
-	enum TILE_TYPE{ENV,PATH,START,END};
+	enum TILE_TYPE{ENV,PATH,START,END,CREEP};
 	
 	Map(int rows, int cols, TextureManager* texManager);
 	~Map();
