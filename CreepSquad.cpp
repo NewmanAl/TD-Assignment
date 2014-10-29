@@ -43,7 +43,7 @@ void CreepSquad::resetCreepSquad(int level)
 	}
 
 	// spawn creep on map at it's starting x,y location
-	for (int i = 0; i < creepSquad.size(); ++i);
+	for (int i = 0; i < creepSquad.size(); ++i)
 		// set creep on the map to it's x,y location
 		//map->setTile(creepSquad[i]->getLocationX(), creepSquad[i]->getLocationY(), MapTile::CREEP);
 }
