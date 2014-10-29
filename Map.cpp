@@ -5,6 +5,11 @@
 
 using namespace std;
 
+Map::Map()
+{
+
+}
+
 Map::Map(int rows, int cols, TextureManager* texManager) :rows(rows), cols(cols), texManager(texManager)
 {
 	this->map = std::vector<std::vector<int> >(rows, std::vector<int>(cols, 0));
@@ -48,6 +53,11 @@ Map::Map(int rows, int cols, TextureManager* texManager) :rows(rows), cols(cols)
 	endSprite.setTextureRect(sf::IntRect(24 * 10, 0, 24, 24));
 }
 
+Map::Map(int rows, int cols)
+{
+	this->map = std::vector<std::vector<int> >(rows, std::vector<int>(cols, 0));
+}
+
 Map::~Map()
 {
 
@@ -62,6 +72,14 @@ void Map::setTile(int x, int y, TILE_TYPE val){
 	*/
 
 	//checking that x and y are within map range and that value is valid
+	if (x >= 0 && x <= (getRows() - 1) &&
+		y >= 0 && y <= (getCols() - 1) &&
+		(val >= 0 && val <= 3))
+		map[x][y] = val;
+}
+
+void Map::setTile(int x, int y, int val)
+{
 	if (x >= 0 && x <= (getRows() - 1) &&
 		y >= 0 && y <= (getCols() - 1) &&
 		(val >= 0 && val <= 3))
