@@ -363,5 +363,5 @@ void Creep::loadCreepSprites()
 // Destructor
 Creep::~Creep()
 {
-
+	//
 }
